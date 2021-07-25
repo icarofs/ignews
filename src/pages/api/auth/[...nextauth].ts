@@ -8,12 +8,26 @@ export default NextAuth({
     Providers.GitHub({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-      scope: "read:user",
+      profile(profile: any) {
+        return profile;
+      },
     }),
   ],
 
   callbacks: {
-    async session(session) {
+    //Obtendo todos os dados do GITHUB, não só os dados padrão (email, image, name)
+    async jwt(token, profile) {
+      return { ...token, ...profile };
+    },
+
+    //Essa função já seria o suficiente para retornar todos os dados
+    // async session(session, user) {
+    //   session.user = user;
+    //   return session;
+    // },
+
+    async session(session, user) {
+      session.user = user;
       try {
         const userActiveSubscription = await fauna.query(
           q.Get(
