@@ -15,7 +15,7 @@ export default NextAuth({
   ],
 
   callbacks: {
-    //Obtendo todos os dados do GITHUB, não só os dados padrão (email, image, name)
+    //Obtendo todos os dados do GITHUB, não só os dados padrão do nextauth (email, image, name)
     async jwt(token, profile) {
       return { ...token, ...profile };
     },
